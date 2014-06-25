@@ -1,0 +1,99 @@
+﻿<phone:PhoneApplicationPage
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+	xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:Converter="clr-namespace:iPower.Phone.Converter" xmlns:ViewModel="clr-namespace:iPower.Phone.ViewModel"
+	x:Class="iPower.Phone.Views.Channel"
+	
+	SupportedOrientations="Portrait" Orientation="Portrait"
+	mc:Ignorable="d"
+	shell:SystemTray.IsVisible="True" >
+
+
+
+
+    <phone:PhoneApplicationPage.Resources>
+        <Converter:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
+        <Converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </phone:PhoneApplicationPage.Resources>
+    <phone:PhoneApplicationPage.FontFamily>
+        <StaticResource ResourceKey="PhoneFontFamilyNormal"/>
+    </phone:PhoneApplicationPage.FontFamily>
+    <phone:PhoneApplicationPage.FontSize>
+        <StaticResource ResourceKey="PhoneFontSizeNormal"/>
+    </phone:PhoneApplicationPage.FontSize>
+    <phone:PhoneApplicationPage.Foreground>
+        <StaticResource ResourceKey="PhoneForegroundBrush"/>
+    </phone:PhoneApplicationPage.Foreground>
+
+
+
+
+    <phone:PhoneApplicationPage.DataContext>
+        <ViewModel:ChannelViewModel/>
+    </phone:PhoneApplicationPage.DataContext>
+
+
+
+
+    <Grid x:Name="LayoutRoot" Background="#FF001D35">
+
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title Panel -->
+        <StackPanel  Grid.Row="0" Margin="19,0,0,0">
+            <Image Width="120" Stretch="Fill" Height="120" Source="{Binding Channel.ImageUrl, Mode=OneWay}"/>
+            <TextBlock Width="455" Text="{Binding Response.Description}" 
+				HorizontalAlignment="Left"
+				VerticalAlignment="Center"
+				TextWrapping="Wrap"
+				FontSize="20"
+				/>
+        </StackPanel>
+
+        <!--TODO: Content should be placed within the following grid-->
+        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,2,19,0">
+            <phone:Pivot >
+                <phone:PivotItem Header="{Binding LocalizedResources.Live, Mode=OneWay, Source={StaticResource LocalizedStrings}}">
+                    <StackPanel>
+                        <Grid VerticalAlignment="Top" Height="120">
+                            <Image HorizontalAlignment="Left" Width="120" Height="120" Source="{Binding NowPlaying.CoverImageUrl}"/>
+                            <StackPanel>
+                                <TextBlock Text="{Binding NowPlaying.SongTitle}" FontSize="22" Margin="130,10,0,0" TextWrapping="Wrap"  VerticalAlignment="Top"/>
+                                <TextBlock Text="{Binding NowPlaying.ArtistTitle}" FontSize="22" VerticalAlignment="Top" TextWrapping="Wrap" Margin="130,10,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Margin="10">
+                            <StackPanel>
+                                <Image Height="96"
+									Source="{Binding ImageButtonSource, Mode=OneWay}" Tap="Image_Tap"/>
+                                <TextBlock Margin="10" Text="{Binding RemainingTime, Converter={StaticResource TimeSpanToStringConverter}, Mode=OneWay}" FontSize="20" HorizontalAlignment="Center"/>
+                                <TextBlock HorizontalAlignment="Center" Text="{Binding LastState}"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </phone:PivotItem>
+                <phone:PivotItem Header="{Binding LocalizedResources.History, Mode=OneWay, Source={StaticResource LocalizedStrings}}">
+                    <ListBox ItemsSource="{Binding Response.History}" ItemTemplate="{StaticResource DataTemplateHistory}" SelectedItem="{Binding SelectedSong, Mode=TwoWay}" />
+                </phone:PivotItem>
+            </phone:Pivot>
+        </Grid>
+        <Grid Background="#CC000000" Grid.RowSpan="2" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" >
+            <StackPanel VerticalAlignment="Center">
+                <ProgressBar HorizontalAlignment="Stretch" IsIndeterminate="True" Margin="15" Background="{x:Null}"/>
+                <TextBlock
+					 
+					VerticalAlignment="Top" FontSize="22" HorizontalAlignment="Center" Text="{Binding LocalizedResources.Loading, Mode=OneWay, Source={StaticResource LocalizedStrings}}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+
+</phone:PhoneApplicationPage>
