@@ -15,7 +15,25 @@ namespace iPower.Phone.Views
         public MainPage()
         {
             InitializeComponent();
-            
+            this.Loaded += MainPage_Loaded;
         }
+
+        void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ListBoxChannels_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ViewModel.MainViewModel MainModel = (ViewModel.MainViewModel)this.DataContext;
+            if (MainModel != null)
+                if (ListBoxChannels.SelectedItem != null)
+                {
+                    MainModel.SelectedChannel = (Models.Channel)ListBoxChannels.SelectedItem;
+                    ListBoxChannels.SelectedItem = null;
+                }
+
+        }
+
     }
 }

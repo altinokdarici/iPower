@@ -27,5 +27,16 @@ namespace iPower.Phone.Views
         {
 
         }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox listBox = (ListBox)sender;
+            ViewModel.ChannelViewModel ChannelModel = (ViewModel.ChannelViewModel)this.DataContext;
+            if (listBox.SelectedItem != null)
+            {
+                ChannelModel.SelectedSong = (Models.Item)listBox.SelectedItem;
+                listBox.SelectedItem = null;
+            }
+        }
     }
 }

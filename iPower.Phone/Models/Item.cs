@@ -20,5 +20,13 @@ namespace iPower.Phone.Models
         public string CoverImageUrl { get; set; }
         public string SongPlayedAtVisible { get; set; }
 
+        public bool HasLyrics
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(SongLyrics);
+            }
+        }
+
     }
 }

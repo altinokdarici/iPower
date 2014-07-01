@@ -32,9 +32,12 @@ namespace iPower.Phone.ViewModel
             {
                 StaticData.Selected.SelectedSong = value;
                 base.RaisePropertyChanged();
-                PhoneApplicationFrame frame = Application.Current.RootVisual as PhoneApplicationFrame;
-                frame.Navigate(new Uri("/Views/Song.xaml", UriKind.Relative));
-
+                if (StaticData.Selected.SelectedSong != null)
+                    if (StaticData.Selected.SelectedSong.HasLyrics)
+                    {
+                        PhoneApplicationFrame frame = Application.Current.RootVisual as PhoneApplicationFrame;
+                        frame.Navigate(new Uri("/Views/Song.xaml", UriKind.Relative));
+                    }
             }
         }
 

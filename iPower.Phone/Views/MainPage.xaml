@@ -35,7 +35,9 @@
 
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
 
-            <ListBox ItemsSource="{Binding Channels}" ItemTemplate="{StaticResource DataTemplateChannel}" SelectedItem="{Binding SelectedChannel, Mode=TwoWay}"/>
+            <ListBox ItemsSource="{Binding Channels}" ItemTemplate="{StaticResource DataTemplateChannel}" 
+                     x:Name="ListBoxChannels" SelectionChanged="ListBoxChannels_SelectionChanged"
+                     />
 
         </Grid>
     </Grid>
