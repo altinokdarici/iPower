@@ -130,7 +130,11 @@ namespace iPower.Phone.ViewModel
 
         }
 
-        private async void Fill()
+        private void Fill()
+        {
+            Load(true);
+        }
+        private async void Load(bool Reset)
         {
             this.Response = await ChannelRepository.Get(this.Channel.ChannelName);
             if (this.Response != null)
@@ -140,10 +144,12 @@ namespace iPower.Phone.ViewModel
                 this.SongTimer.Tick += SongTimer_Tick;
                 this.SongTimer.Start();
                 base.IsLoading = false;
-
-                BackgroundAudioPlayer.Instance.Close();
-                BackgroundAudioPlayer.Instance.Track = new AudioTrack(null, StaticData.Selected.SelectedChannel.Name, null, null, null, StaticData.Selected.SelectedChannel.StreamUrl, EnabledPlayerControls.Pause);
-                BackgroundAudioPlayer.Instance.PlayStateChanged += Instance_PlayStateChanged;
+                if (Reset)
+                {
+                    BackgroundAudioPlayer.Instance.Close();
+                    BackgroundAudioPlayer.Instance.Track = new AudioTrack(null, StaticData.Selected.SelectedChannel.Name, null, null, null, StaticData.Selected.SelectedChannel.StreamUrl, EnabledPlayerControls.Pause);
+                    BackgroundAudioPlayer.Instance.PlayStateChanged += Instance_PlayStateChanged;
+                }
             }
             else
             {
@@ -161,7 +167,7 @@ namespace iPower.Phone.ViewModel
             if (this.NowPlaying.RemainingSeconds <= 0)
             {
                 this.SongTimer.Stop();
-                Fill();
+                Load(false);
             }
             else
             {
